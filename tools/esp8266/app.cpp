@@ -400,16 +400,40 @@ void app::showLiveData(void) {
     String modHtml;
     for(uint8_t id = 0; id < mSys->getNumInverters(); id++) {
         inverter_t *iv = mSys->getInverterByPos(id);
+      
         if(NULL != iv) {
 #ifdef LIVEDATA_VISUALIZED
             uint8_t modNum, pos;
             switch(iv->type) {
                 default:              modNum = 1; break;
-                case INV_TYPE_HM600:  modNum = 2; break;
+                case INV_TYPE_HM600:
+                case INV_TYPE_HM800:  modNum = 2; break;
                 case INV_TYPE_HM1200: modNum = 4; break;
             }
 
-            modHtml += "<div class=\"ch-group\"><h3>" + String(iv->name) + "</h3>";
+           
+
+	        modHtml += "<div class=\"ch-group\"><h3>" + String(iv->name) + "</h3>";
+
+            // Show AC parameters
+            modHtml += "<div class=\"ch\"><span class=\"head\">AC values</span>";
+            for(uint8_t j = 0; j < 7; j++) {
+                switch(j) {
+                    default: pos = (mSys->getPosByChField(iv, 0, FLD_UAC)); break;
+                    case 1:  pos = (mSys->getPosByChField(iv, 0, FLD_F)); break;
+                    case 2:  pos = (mSys->getPosByChField(iv, 0, FLD_PAC)); break;
+                    case 3:  pos = (mSys->getPosByChField(iv, 0, FLD_T));  break;
+                    case 4:  pos = (mSys->getPosByChField(iv, 0, FLD_YW));  break;
+                    case 5:  pos = (mSys->getPosByChField(iv, 0, FLD_YT));  break;
+                    case 6:  pos = (mSys->getPosByChField(iv, 0, FLD_IAC)); break;
+                }
+                if(0xff != pos) {
+                    modHtml += "<span class=\"value\">" + String(mSys->getValue(iv, pos));
+                    modHtml += "<span class=\"unit\">" + String(mSys->getUnit(iv, pos)) + "</span></span>";
+                    modHtml += "<span class=\"info\">" + String(mSys->getFieldName(iv, pos)) + "</span>";
+                }
+            }
+            modHtml += "</div>";
 
             for(uint8_t ch = 1; ch <= modNum; ch ++) {
                 modHtml += "<div class=\"ch\"><span class=\"head\">CHANNEL " + String(ch) + "</span>";
