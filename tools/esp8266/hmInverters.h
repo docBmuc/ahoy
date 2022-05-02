@@ -20,8 +20,8 @@ const char* const fields[] = {"U_DC", "I_DC", "P_DC", "YieldDay", "YieldWeek", "
 enum {CH0 = 0, CH1, CH2, CH3, CH4};
 enum {CMD01 = 0x01, CMD02, CMD03, CMD82 = 0x82, CMD83, CMD84};
 
-enum {INV_TYPE_HM600 = 0, INV_TYPE_HM1200, INV_TYPE_HM400, INV_TYPE_HM800};
-const char* const invTypes[] = {"HM600", "HM1200 / HM1500", "HM400", "HM800"};
+enum {INV_TYPE_HM400=0, INV_TYPE_HM600, INV_TYPE_HM800, INV_TYPE_HM1200};
+const char* const invTypes[] = {"HM400", "HM600", "HM700 / 800", "HM1200 / HM1500"};
 #define NUM_INVERTER_TYPES   4
 
 typedef struct {
@@ -75,7 +75,7 @@ const byteAssign_t hm400assignment[] = {
 
 
 //-------------------------------------
-// HM600, HM700
+// HM600
 //-------------------------------------
 const byteAssign_t hm600assignment[] = {
     { FLD_UDC, UNIT_V,   CH1, CMD01,  3, 2, 10   },
@@ -97,7 +97,7 @@ const byteAssign_t hm600assignment[] = {
 
 
 //-------------------------------------
-// HM800
+// HM700, HM800
 //-------------------------------------
 const byteAssign_t hm800assignment[] = {
 
